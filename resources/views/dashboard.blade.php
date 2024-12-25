@@ -247,153 +247,153 @@
 @endsection
 
 @section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize voting functionality
-            initializeVoting();
-        });
+{{--    <script>--}}
+{{--        document.addEventListener('DOMContentLoaded', function() {--}}
+{{--            // Initialize voting functionality--}}
+{{--            initializeVoting();--}}
+{{--        });--}}
 
-        function initializeVoting() {
-            const voteButtons = document.querySelectorAll('.vote-button');
-            const voteModal = document.getElementById('voteConfirmationModal');
-            const selectedCandidateNameSpan = document.getElementById('selectedCandidateName');
-            const voteForm = document.getElementById('voteForm');
-            let currentCandidateId = null;
-            let isSubmitting = false;
+{{--        function initializeVoting() {--}}
+{{--            const voteButtons = document.querySelectorAll('.vote-button');--}}
+{{--            const voteModal = document.getElementById('voteConfirmationModal');--}}
+{{--            const selectedCandidateNameSpan = document.getElementById('selectedCandidateName');--}}
+{{--            const voteForm = document.getElementById('voteForm');--}}
+{{--            let currentCandidateId = null;--}}
+{{--            let isSubmitting = false;--}}
 
-            // Show vote confirmation modal
-            function showVoteModal(candidateId, candidateName) {
-                currentCandidateId = candidateId;
-                selectedCandidateNameSpan.textContent = candidateName;
-                voteModal.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
-            }
+{{--            // Show vote confirmation modal--}}
+{{--            function showVoteModal(candidateId, candidateName) {--}}
+{{--                currentCandidateId = candidateId;--}}
+{{--                selectedCandidateNameSpan.textContent = candidateName;--}}
+{{--                voteModal.style.display = 'block';--}}
+{{--                document.body.style.overflow = 'hidden'; // Prevent background scrolling--}}
+{{--            }--}}
 
-            // Close vote confirmation modal
-            window.closeVoteModal = function() {
-                voteModal.style.display = 'none';
-                currentCandidateId = null;
-                document.body.style.overflow = 'auto'; // Restore scrolling
-            }
+{{--            // Close vote confirmation modal--}}
+{{--            window.closeVoteModal = function() {--}}
+{{--                voteModal.style.display = 'none';--}}
+{{--                currentCandidateId = null;--}}
+{{--                document.body.style.overflow = 'auto'; // Restore scrolling--}}
+{{--            }--}}
 
-            // Handle vote button clicks
-            voteButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const candidateId = e.currentTarget.dataset.candidateId;
-                    const candidateName = e.currentTarget.dataset.candidateName;
-                    showVoteModal(candidateId, candidateName);
-                });
-            });
+{{--            // Handle vote button clicks--}}
+{{--            voteButtons.forEach(button => {--}}
+{{--                button.addEventListener('click', (e) => {--}}
+{{--                    const candidateId = e.currentTarget.dataset.candidateId;--}}
+{{--                    const candidateName = e.currentTarget.dataset.candidateName;--}}
+{{--                    showVoteModal(candidateId, candidateName);--}}
+{{--                });--}}
+{{--            });--}}
 
-            // Handle vote form submission
-            voteForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+{{--            // Handle vote form submission--}}
+{{--            voteForm.addEventListener('submit', async (e) => {--}}
+{{--                e.preventDefault();--}}
 
-                if (!currentCandidateId || isSubmitting) return;
+{{--                if (!currentCandidateId || isSubmitting) return;--}}
 
-                isSubmitting = true;
+{{--                isSubmitting = true;--}}
 
-                // Update UI to show loading state
-                const currentButton = document.querySelector(`.vote-button[data-candidate-id="${currentCandidateId}"]`);
-                const buttonText = currentButton.querySelector('.vote-text');
-                const spinner = currentButton.querySelector('.loading-spinner');
-                const submitButton = voteForm.querySelector('button[type="submit"]');
+{{--                // Update UI to show loading state--}}
+{{--                const currentButton = document.querySelector(`.vote-button[data-candidate-id="${currentCandidateId}"]`);--}}
+{{--                const buttonText = currentButton.querySelector('.vote-text');--}}
+{{--                const spinner = currentButton.querySelector('.loading-spinner');--}}
+{{--                const submitButton = voteForm.querySelector('button[type="submit"]');--}}
 
-                // Disable all interactive elements
-                voteButtons.forEach(btn => btn.disabled = true);
-                submitButton.disabled = true;
-                buttonText.style.display = 'none';
-                spinner.style.display = 'inline-block';
+{{--                // Disable all interactive elements--}}
+{{--                voteButtons.forEach(btn => btn.disabled = true);--}}
+{{--                submitButton.disabled = true;--}}
+{{--                buttonText.style.display = 'none';--}}
+{{--                spinner.style.display = 'inline-block';--}}
 
-                try {
-                    const response = await fetch(`/voting/vote/${currentCandidateId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        },
-                        body: JSON.stringify({ candidate_id: currentCandidateId })
-                    });
+{{--                try {--}}
+{{--                    const response = await fetch(`/voting/vote/${currentCandidateId}`, {--}}
+{{--                        method: 'POST',--}}
+{{--                        headers: {--}}
+{{--                            'Content-Type': 'application/json',--}}
+{{--                            'Accept': 'application/json',--}}
+{{--                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content--}}
+{{--                        },--}}
+{{--                        body: JSON.stringify({ candidate_id: currentCandidateId })--}}
+{{--                    });--}}
 
-                    const data = await response.json();
+{{--                    const data = await response.json();--}}
 
-                    if (!response.ok) {
-                        throw new Error(data.message || 'An error occurred while processing your vote.');
-                    }
+{{--                    if (!response.ok) {--}}
+{{--                        throw new Error(data.message || 'An error occurred while processing your vote.');--}}
+{{--                    }--}}
 
-                    if (data.success) {
-                        showAlert('success', data.message);
-                        closeVoteModal();
+{{--                    if (data.success) {--}}
+{{--                        showAlert('success', data.message);--}}
+{{--                        closeVoteModal();--}}
 
-                        // Redirect after a short delay
-                        setTimeout(() => {
-                            window.location.href = data.redirect;
-                        }, 1500);
-                    }
-                } catch (error) {
-                    showAlert('error', error.message);
+{{--                        // Redirect after a short delay--}}
+{{--                        setTimeout(() => {--}}
+{{--                            window.location.href = data.redirect;--}}
+{{--                        }, 1500);--}}
+{{--                    }--}}
+{{--                } catch (error) {--}}
+{{--                    showAlert('error', error.message);--}}
 
-                    // Reset UI state
-                    voteButtons.forEach(btn => btn.disabled = false);
-                    submitButton.disabled = false;
-                    buttonText.style.display = 'block';
-                    spinner.style.display = 'none';
-                    closeVoteModal();
-                } finally {
-                    isSubmitting = false;
-                }
-            });
+{{--                    // Reset UI state--}}
+{{--                    voteButtons.forEach(btn => btn.disabled = false);--}}
+{{--                    submitButton.disabled = false;--}}
+{{--                    buttonText.style.display = 'block';--}}
+{{--                    spinner.style.display = 'none';--}}
+{{--                    closeVoteModal();--}}
+{{--                } finally {--}}
+{{--                    isSubmitting = false;--}}
+{{--                }--}}
+{{--            });--}}
 
-            // Handle modal close on outside click
-            voteModal.addEventListener('click', (event) => {
-                if (event.target === voteModal) {
-                    closeVoteModal();
-                }
-            });
+{{--            // Handle modal close on outside click--}}
+{{--            voteModal.addEventListener('click', (event) => {--}}
+{{--                if (event.target === voteModal) {--}}
+{{--                    closeVoteModal();--}}
+{{--                }--}}
+{{--            });--}}
 
-            // Handle modal close on escape key
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && voteModal.style.display === 'block') {
-                    closeVoteModal();
-                }
-            });
-        }
+{{--            // Handle modal close on escape key--}}
+{{--            document.addEventListener('keydown', (event) => {--}}
+{{--                if (event.key === 'Escape' && voteModal.style.display === 'block') {--}}
+{{--                    closeVoteModal();--}}
+{{--                }--}}
+{{--            });--}}
+{{--        }--}}
 
-        // Alert handling function
-        function showAlert(type, message) {
-            // Remove any existing alerts
-            const existingAlerts = document.querySelectorAll('.alert-message');
-            existingAlerts.forEach(alert => alert.remove());
+{{--        // Alert handling function--}}
+{{--        function showAlert(type, message) {--}}
+{{--            // Remove any existing alerts--}}
+{{--            const existingAlerts = document.querySelectorAll('.alert-message');--}}
+{{--            existingAlerts.forEach(alert => alert.remove());--}}
 
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert-message fixed top-4 right-4 z-50 p-4 rounded-md shadow-lg transform transition-all duration-300 ${
-                type === 'success' ? 'bg-green-50 text-green-800 border border-green-200'
-                    : 'bg-red-50 text-red-800 border border-red-200'
-            }`;
+{{--            const alertDiv = document.createElement('div');--}}
+{{--            alertDiv.className = `alert-message fixed top-4 right-4 z-50 p-4 rounded-md shadow-lg transform transition-all duration-300 ${--}}
+{{--                type === 'success' ? 'bg-green-50 text-green-800 border border-green-200'--}}
+{{--                    : 'bg-red-50 text-red-800 border border-red-200'--}}
+{{--            }`;--}}
 
-            alertDiv.innerHTML = `
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        ${type === 'success'
-                        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'
-                        : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>'
-                    }
-                    </svg>
-                    <span>${message}</span>
-                </div>
-            `;
+{{--            alertDiv.innerHTML = `--}}
+{{--                <div class="flex items-center">--}}
+{{--                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">--}}
+{{--                        ${type === 'success'--}}
+{{--                        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'--}}
+{{--                        : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>'--}}
+{{--                    }--}}
+{{--                    </svg>--}}
+{{--                    <span>${message}</span>--}}
+{{--                </div>--}}
+{{--            `;--}}
 
-            document.body.appendChild(alertDiv);
+{{--            document.body.appendChild(alertDiv);--}}
 
-            // Add entrance animation
-            setTimeout(() => alertDiv.classList.add('translate-y-1'), 10);
+{{--            // Add entrance animation--}}
+{{--            setTimeout(() => alertDiv.classList.add('translate-y-1'), 10);--}}
 
-            // Remove the alert after 5 seconds
-            setTimeout(() => {
-                alertDiv.classList.add('opacity-0');
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 5000);
-        }
-    </script>
+{{--            // Remove the alert after 5 seconds--}}
+{{--            setTimeout(() => {--}}
+{{--                alertDiv.classList.add('opacity-0');--}}
+{{--                setTimeout(() => alertDiv.remove(), 300);--}}
+{{--            }, 5000);--}}
+{{--        }--}}
+{{--    </script>--}}
 @endsection
